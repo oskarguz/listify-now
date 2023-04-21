@@ -5,23 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreChecklistRequest;
 use App\Http\Requests\UpdateChecklistRequest;
 use App\Models\Checklist;
+use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 class ChecklistController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('checklist.create');
     }
 
     /**
@@ -29,7 +23,7 @@ class ChecklistController extends Controller
      */
     public function store(StoreChecklistRequest $request)
     {
-        //
+        abort(500);
     }
 
     /**
@@ -37,7 +31,7 @@ class ChecklistController extends Controller
      */
     public function show(Checklist $checklist)
     {
-        //
+        return view('checklist.show');
     }
 
     /**
@@ -45,7 +39,7 @@ class ChecklistController extends Controller
      */
     public function edit(Checklist $checklist)
     {
-        //
+        return view('checklist.edit');
     }
 
     /**
@@ -53,7 +47,7 @@ class ChecklistController extends Controller
      */
     public function update(UpdateChecklistRequest $request, Checklist $checklist)
     {
-        //
+        abort(Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -61,6 +55,6 @@ class ChecklistController extends Controller
      */
     public function destroy(Checklist $checklist)
     {
-        //
+        abort(Response::HTTP_NOT_FOUND);
     }
 }
