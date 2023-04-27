@@ -40,5 +40,8 @@ Route::controller(ChecklistItemController::class)->prefix('/checklist-item')->gr
 })->middleware('onlyXhr');
 
 Route::controller(SecurityController::class)->group(function () {
-    Route::get('/login', 'login');
+    Route::get('/login', 'login')->name('security.login');
+    Route::get('/logout', 'logout')->name('security.logout');
+    Route::get('/auth', 'authRedirect')->name('security.auth');
+    Route::get('/auth/callback', 'authCallback')->name('security.callback');
 });

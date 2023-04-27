@@ -19,7 +19,7 @@
     @include('layouts.header')
 
     <!-- Page Content -->
-    <main class="flex-1">
+    <main class="flex-1 flex flex-wrap">
         {{ $slot }}
     </main>
 

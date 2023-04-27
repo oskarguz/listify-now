@@ -12,10 +12,11 @@
         >
             <i class="fi fi-br-plus"></i> Create
         </x-button>
-        <x-button type="button"
+        <x-button type="link"
                   variant="transparent"
                   text-color="black"
                   class="!p-0 text-3xl"
+                  href="{{ url('/login') }}"
         >
             <i class="fi fi-ss-user"></i>
         </x-button>
