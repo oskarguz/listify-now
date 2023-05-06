@@ -4,7 +4,7 @@
     <div id="app" class="w-full"></div>
 
     <x-slot:javascript>
-        @vite(['resources/js/pages/checklist_create.js'])
+        @vite(['resources/js/pages/checklist_form.js'])
     </x-slot:javascript>
 </x-app-layout>
 

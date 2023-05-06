@@ -18,8 +18,8 @@ class Checklist extends Model
     protected $attributes = [
         'name' => '',
         'type' => ChecklistType::Default,
-        'modification_access' => ModificationAccess::Private,
-        'visibility' => Visibility::Private,
+        'modification_access' => ModificationAccess::Public,
+        'visibility' => Visibility::Public,
         'created_by_id' => null,
         'updated_by_id' => null,
     ];

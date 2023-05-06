@@ -2,6 +2,25 @@
 import ChecklistNameSection from "./ChecklistNameSection.vue";
 import ChecklistItemsSection from "./ChecklistItemsSection.vue";
 import ChecklistCopyLink from "./ChecklistCopyLink.vue";
+import { useChecklistStore } from "../stores/checklist";
+import ChecklistCreateButton from "./ChecklistCreateButton.vue";
+
+const store = useChecklistStore();
+
+let appElement = document.getElementById('app');
+if (appElement) {
+    let checklist;
+    try {
+        checklist = JSON.parse(appElement.dataset.checklist);
+    } catch (e) {
+        checklist = null;
+    }
+    if (checklist) {
+        store.init(checklist);
+        delete appElement.dataset.checklist;
+    }
+}
+
 </script>
 
 <template>
@@ -16,7 +35,8 @@ import ChecklistCopyLink from "./ChecklistCopyLink.vue";
             If you want to access all features, <span class="font-bold">log in</span>
         </p>
 
-        <ChecklistCopyLink></ChecklistCopyLink>
+        <ChecklistCopyLink v-if="store.id"></ChecklistCopyLink>
+        <ChecklistCreateButton v-if="!store.id"></ChecklistCreateButton>
     </div>
 </template>
 

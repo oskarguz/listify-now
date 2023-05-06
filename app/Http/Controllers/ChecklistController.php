@@ -23,7 +23,15 @@ class ChecklistController extends Controller
      */
     public function store(StoreChecklistRequest $request)
     {
-        abort(500);
+        $validated = $request->validated();
+
+        $checklist = Checklist::create($validated);
+
+        $items = $validated['items'] ?? [];
+        $checklist->items()->createMany($items);
+        $checklist->loadMissing('items');
+
+        return $checklist->toArray();
     }
 
     /**
@@ -31,15 +39,7 @@ class ChecklistController extends Controller
      */
     public function show(Checklist $checklist)
     {
-        return view('checklist.show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Checklist $checklist)
-    {
-        return view('checklist.edit');
+        return view('checklist.show', ['checklist' => $checklist]);
     }
 
     /**
@@ -47,7 +47,16 @@ class ChecklistController extends Controller
      */
     public function update(UpdateChecklistRequest $request, Checklist $checklist)
     {
-        abort(Response::HTTP_BAD_REQUEST);
+        $validated = $request->validated();
+
+        if (empty($validated)) {
+            return \response('Ok');
+        }
+
+        $checklist->fill($validated);
+        $checklist->push();
+
+        return \response('Ok');
     }
 
     /**

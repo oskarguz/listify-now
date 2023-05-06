@@ -2,10 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 
-class StoreChecklistRequest extends FormRequest
+class StoreChecklistRequest extends UpdateChecklistRequest
 {
+    protected $stopOnFirstFailure = true;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -21,8 +22,13 @@ class StoreChecklistRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+         return array_merge(
+            [
+                'items' => 'nullable|array',
+                'items.*.description' => 'required_with:items|string|max:400',
+                'items.*.checked' => 'required_with:items|boolean',
+            ],
+            parent::rules()
+        );
     }
 }

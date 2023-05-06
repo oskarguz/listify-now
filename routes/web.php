@@ -27,16 +27,15 @@ Route::middleware('auth')->group(function () {
 Route::controller(ChecklistController::class)->prefix('/checklist')->group(function () {
     Route::get('/create', 'create');
     Route::post('/create', 'store')->middleware('onlyXhr');
-    Route::get('/show/{checklist}', 'show');
-    Route::get('/update/{checklist}', 'edit');
-    Route::post('/update/{checklist}', 'update')->middleware('onlyXhr');
-    Route::post('/destroy/{checklist}', 'destroy');
+    Route::get('/{checklist}', 'show');
+    Route::post('/{checklist}/update', 'update')->middleware('onlyXhr');
+    Route::post('/{checklist}/destroy', 'destroy');
 });
 
 Route::controller(ChecklistItemController::class)->prefix('/checklist-item')->group(function () {
     Route::post('/create', 'store');
-    Route::post('/update/{checklistItem}', 'update');
-    Route::post('/destroy/{checklistItem}', 'destroy');
+    Route::post('/{checklistItem}/update', 'update');
+    Route::post('/{checklistItem}/destroy', 'destroy');
 })->middleware('onlyXhr');
 
 Route::controller(SecurityController::class)->group(function () {
