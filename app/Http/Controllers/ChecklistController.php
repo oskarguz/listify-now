@@ -50,13 +50,13 @@ class ChecklistController extends Controller
         $validated = $request->validated();
 
         if (empty($validated)) {
-            return \response('Ok');
+            return \response()->json(['status' => 'OK']);
         }
 
         $checklist->fill($validated);
         $checklist->push();
 
-        return \response('Ok');
+        return \response()->json(['status' => 'OK']);
     }
 
     /**

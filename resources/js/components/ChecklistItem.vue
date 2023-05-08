@@ -1,5 +1,9 @@
 <script setup>
-import {computed, ref} from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useChecklistStore } from "../stores/checklist";
+
+const store = useChecklistStore();
+const textAreaInp = ref(null);
 
 const props = defineProps({
     id: String,
@@ -18,11 +22,8 @@ const isNewItem = computed(() => {
 });
 
 function onTextAreaInput(e) {
-    let textArea = e.target;
-
-    description.value = textArea.value;
-
-    adjustTextareaHeight(textArea);
+    description.value = textAreaInp.value.value;
+    adjustTextareaHeight(textAreaInp.value);
 }
 
 function adjustTextareaHeight(el) {
@@ -31,12 +32,68 @@ function adjustTextareaHeight(el) {
 }
 
 function deleteItem() {
-    // @TODO delete item
+    store.deleteItem(id.value).then((result) => {
+        console.log(result.message);
+    }).catch((error) => {
+        console.error(error.message);
+    })
 }
 
 function addItem() {
-    // @TODO save item
+    if (!description.value.trim()) {
+        console.error('Item description is empty');
+        return;
+    }
+
+    store.createItem(description.value, checked.value).then((result) => {
+        console.log(result.message);
+    }).catch((error) => {
+        console.error(error.message);
+    });
+    resetValues();
 }
+
+function resetValues() {
+    id.value = props.id || null
+    description.value = props.description || '';
+    position.value = props.position || 0;
+    checked.value = props.checked;
+}
+
+onMounted(() => {
+    adjustTextareaHeight(textAreaInp.value);
+});
+
+watch(description, async (newDescription, oldDescription) => {
+    if (newDescription.trim() === oldDescription.trim()) {
+        return;
+    }
+    if (!id.value) {
+        return;
+    }
+
+    store.updateItemDescription(id.value, newDescription).then((result) => {
+        console.log(result.message);
+    }).catch((error) => {
+        console.error(error.message);
+    });
+});
+
+watch(checked, async (newChecked, oldChecked) => {
+    if (newChecked === oldChecked) {
+        return;
+    }
+    if (!id.value) {
+        return;
+    }
+
+    store.updateItemChecked(id.value, newChecked).then((result) => {
+        console.log(result.message);
+    }).catch((error) => {
+        console.error(error.message);
+    });
+
+});
 </script>
 
 <template>
@@ -45,7 +102,8 @@ function addItem() {
             <input v-model="checked" type="checkbox" class="p-3 me-2">
             <div class="flex-grow content-grow">
                 <textarea @input="onTextAreaInput"
-                          :value="(props.description || '')"
+                          :value="(description || '')"
+                          ref="textAreaInp"
                           class="w-full"
                           rows="1">
                 </textarea>

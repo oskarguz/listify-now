@@ -7,3 +7,19 @@ export function create(checklist) {
 export function updateName(id, name) {
     return axios.post(`/checklist/${id}/update`, { name });
 }
+
+export function createItem(checklistId, item) {
+    return axios.post(`/checklist/${checklistId}/items/create`, item);
+}
+
+export function updateItemDescription(checklistId, id, description) {
+    return axios.post(`/checklist/${checklistId}/items/${id}/update`, { description })
+}
+
+export function updateItemChecked(checklistId, id, checked) {
+    return axios.post(`/checklist/${checklistId}/items/${id}/update`, { checked })
+}
+
+export function deleteItem(checklistId, id) {
+    return axios.post(`/checklist/${checklistId}/items/${id}/destroy`);
+}

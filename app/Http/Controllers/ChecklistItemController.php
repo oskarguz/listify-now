@@ -4,32 +4,47 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreChecklistItemRequest;
 use App\Http\Requests\UpdateChecklistItemRequest;
+use App\Models\Checklist;
 use App\Models\ChecklistItem;
-use Symfony\Component\HttpFoundation\Response;
 
 class ChecklistItemController extends Controller
 {
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreChecklistItemRequest $request)
+    public function store(StoreChecklistItemRequest $request, Checklist $checklist)
     {
-        abort(Response::HTTP_BAD_REQUEST);
+        $validated = $request->validated();
+
+        $item = new ChecklistItem($validated);
+        $checklist->items()->save($item);
+
+        return $item->toArray();
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChecklistItemRequest $request, ChecklistItem $checklistItem)
+    public function update(UpdateChecklistItemRequest $request, Checklist $checklist, ChecklistItem $checklistItem)
     {
-        abort(Response::HTTP_BAD_REQUEST);
+        $validated = $request->validated();
+
+        if (empty($validated)) {
+            return \response()->json(['status' => 'OK']);
+        }
+
+        $checklistItem->fill($validated);
+        $checklistItem->push();
+
+        return \response()->json(['status' => 'OK']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ChecklistItem $checklistItem)
+    public function destroy(Checklist $checklist, ChecklistItem $checklistItem)
     {
-        abort(Response::HTTP_NOT_FOUND);
+        $checklistItem->delete();
+        return \response()->json(['status' => 'OK']);
     }
 }

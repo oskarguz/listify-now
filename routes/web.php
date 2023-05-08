@@ -32,7 +32,7 @@ Route::controller(ChecklistController::class)->prefix('/checklist')->group(funct
     Route::post('/{checklist}/destroy', 'destroy');
 });
 
-Route::controller(ChecklistItemController::class)->prefix('/checklist-item')->group(function () {
+Route::controller(ChecklistItemController::class)->prefix('/checklist/{checklist}/items')->group(function () {
     Route::post('/create', 'store');
     Route::post('/{checklistItem}/update', 'update');
     Route::post('/{checklistItem}/destroy', 'destroy');

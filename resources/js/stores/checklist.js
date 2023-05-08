@@ -5,7 +5,7 @@ import * as api from "../api/checklistApi";
 export const useChecklistStore = defineStore('checklist', () => {
     const id = ref(null);
     const name = ref('New list');
-    const items = ref(new Map());
+    const items = ref([]);
 
     const pendingRequestsCount = ref(0);
     const url = ref(window.location.href);
@@ -28,11 +28,13 @@ export const useChecklistStore = defineStore('checklist', () => {
         let origin = window.location.origin;
         if (newId && !oldId) {
             newUrl = `${origin}/checklist/${newId}`;
-            window.history.pushState({}, `${name} - Listify Now`, newUrl);
+            window.history.pushState(null, `${name.value} - Listify Now`, newUrl);
+            document.title = `${name.value} - Listify Now`;
         }
         if (!newId && oldId) {
             newUrl = `${origin}/checklist/create`;
-            window.history.pushState({}, 'Create new checlist - Listify Now', newUrl);
+            window.history.pushState(null, 'Create new checlist - Listify Now', newUrl);
+            document.title = 'Create new checlist - Listify Now';
         }
 
         if (newUrl) {
@@ -44,7 +46,7 @@ export const useChecklistStore = defineStore('checklist', () => {
     function $reset() {
         id.value = null;
         name.value = '';
-        items.value = new Map();
+        items.value = [];
         pendingRequestsCount.value = 0;
     }
 
@@ -62,6 +64,7 @@ export const useChecklistStore = defineStore('checklist', () => {
                 let checklist = response.data;
 
                 id.value = checklist.id;
+                items.value = checklist.items;
                 // @TODO save id somewhere on client device
 
                 result.message = 'List has been created';
@@ -120,11 +123,133 @@ export const useChecklistStore = defineStore('checklist', () => {
             name.value = checklist.name;
         }
         if (checklist.hasOwnProperty('items')) {
-            items.value = new Map(checklist.items);
+            items.value = checklist.items;
         }
     }
 
-    return { id, name, items, hasPendingRequest, getUrl, $reset, create, updateName, init };
+    function createItem(description, checked) {
+        return new Promise((resolve, reject) => {
+            let result = { message: '' };
+
+            const item = { description, checked };
+            if (!id.value) {
+                const tmpId = Date.now() + description;
+                item.id = tmpId;
+                items.value.push(item);
+
+                result.message = 'Item has been created';
+                return resolve(result);
+            }
+
+            api.createItem(id.value, item).then((response) => {
+                let createdItem = response.data;
+                items.value.push(createdItem);
+
+                result.message = 'Item has been created';
+                return resolve(result);
+            }).catch((err) => {
+                if (err.response) {
+                    result.message = err.response.data.message;
+                }
+                if (!result.message) {
+                    result.message = err.message || String(err);
+                }
+
+                return reject(result);
+            })
+        });
+    }
+
+    function deleteItem(itemId) {
+        return new Promise((resolve, reject) => {
+            let result = { message: '' };
+
+            if (!id.value) {
+                items.value = items.value.filter((el) => el.id !== itemId);
+
+                result.message = 'Item has been deleted';
+                return resolve(result);
+            }
+
+            api.deleteItem(id.value, itemId).then((response) => {
+                items.value = items.value.filter((el) => el.id !== itemId);
+
+                result.message = 'Item has been deleted';
+                return resolve(result);
+            }).catch((err) => {
+                if (err.response) {
+                    result.message = err.response.data.message;
+                }
+                if (!result.message) {
+                    result.message = err.message || String(err);
+                }
+
+                return reject(result);
+            })
+        });
+    }
+
+    function updateItemDescription(itemId, description) {
+        return new Promise((resolve, reject) => {
+            let result = { message: '' };
+            const itemIndex = items.value.findIndex((el) => el.id === itemId);
+
+            if (!id.value) {
+                items.value[itemIndex].description = description;
+
+                result.message = 'Item has been updated';
+                return resolve(result);
+            }
+
+            api.updateItemDescription(id.value, itemId, description).then((response) => {
+                items.value[itemIndex].description = description;
+
+                result.message = 'Item has been created';
+                return resolve(result);
+            }).catch((err) => {
+                if (err.response) {
+                    result.message = err.response.data.message;
+                }
+                if (!result.message) {
+                    result.message = err.message || String(err);
+                }
+
+                return reject(result);
+            })
+        });
+    }
+
+    function updateItemChecked(itemId, checked) {
+        return new Promise((resolve, reject) => {
+            let result = { message: '' };
+            const itemIndex = items.value.findIndex((el) => el.id === itemId);
+
+            if (!id.value) {
+                items.value[itemIndex].checked = checked;
+
+                result.message = 'Item has been updated';
+                return resolve(result);
+            }
+
+            api.updateItemChecked(id.value, itemId, checked).then((response) => {
+                items.value[itemIndex].checked = checked;
+
+                result.message = 'Item has been created';
+                return resolve(result);
+            }).catch((err) => {
+                if (err.response) {
+                    result.message = err.response.data.message;
+                }
+                if (!result.message) {
+                    result.message = err.message || String(err);
+                }
+
+                return reject(result);
+            })
+        });
+    }
+
+    return { id, name, items, hasPendingRequest, getUrl, $reset, create, updateName, init, createItem, deleteItem, updateItemDescription, updateItemChecked };
 });
 
 if (import.meta.hot) {
