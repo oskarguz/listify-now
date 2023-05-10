@@ -1,6 +1,7 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import {computed, ref, watch} from "vue";
 import * as api from "../api/checklistApi";
+import * as localStorageApi from '../api/localStorageApi';
 
 export const useChecklistStore = defineStore('checklist', () => {
     const id = ref(null);
@@ -65,7 +66,8 @@ export const useChecklistStore = defineStore('checklist', () => {
 
                 id.value = checklist.id;
                 items.value = checklist.items;
-                // @TODO save id somewhere on client device
+
+                localStorageApi.addChecklistId(checklist.id);
 
                 result.message = 'List has been created';
                 return resolve(result);
