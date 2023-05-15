@@ -5,6 +5,7 @@ use App\Http\Controllers\ChecklistItemController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SecurityController;
+use App\Models\Checklist;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,16 +21,25 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
-});
+Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
 Route::controller(ChecklistController::class)->prefix('/checklist')->group(function () {
-    Route::get('/create', 'create');
-    Route::post('/create', 'store')->middleware('onlyXhr');
-    Route::get('/{checklist}', 'show');
-    Route::post('/{checklist}/update', 'update')->middleware('onlyXhr');
-    Route::post('/{checklist}/destroy', 'destroy');
+    Route::get('/create', 'create')
+        ->can('create', Checklist::class);
+
+    Route::post('/create', 'store')
+        ->middleware('onlyXhr')
+        ->can('create', Checklist::class);
+
+    Route::get('/{checklist}', 'show')
+        ->can('view', 'checklist');
+
+    Route::post('/{checklist}/update', 'update')
+        ->middleware('onlyXhr')
+        ->can('update', 'checklist');
+
+    Route::post('/{checklist}/destroy', 'destroy')
+        ->can('delete', 'checklist');
 });
 
 Route::controller(ChecklistItemController::class)->prefix('/checklist/{checklist}/items')->group(function () {

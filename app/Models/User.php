@@ -18,4 +18,10 @@ class User extends Authenticatable
         'created_at',
         'updated_at',
     ];
+
+    protected $visible = [
+        'id',
+        'name',
+        'avatar'
+    ];
 }

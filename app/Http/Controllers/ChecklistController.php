@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreChecklistRequest;
 use App\Http\Requests\UpdateChecklistRequest;
 use App\Models\Checklist;
+use App\Models\ChecklistItem;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,13 +24,25 @@ class ChecklistController extends Controller
      */
     public function store(StoreChecklistRequest $request)
     {
+        $user = \Auth::user();
         $validated = $request->validated();
 
         $checklist = Checklist::create($validated);
 
         $items = $validated['items'] ?? [];
-        $checklist->items()->createMany($items);
-        $checklist->loadMissing('items');
+        foreach ($items as $item) {
+            $itemModel = new ChecklistItem($item);
+            $itemModel->createdBy()->associate($user);
+            $itemModel->updatedBy()->associate($user);
+
+            $checklist->items()->save($itemModel);
+        }
+
+        $checklist->createdBy()->associate($user);
+        $checklist->updatedBy()->associate($user);
+        $checklist->push();
+
+        $checklist->loadMissing(['items']);
 
         return $checklist->toArray();
     }

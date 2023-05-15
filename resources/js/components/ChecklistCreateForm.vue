@@ -24,7 +24,7 @@ if (appElement) {
 </script>
 
 <template>
-    <div class="mx-auto mt-8 px-4">
+    <section class="container columns-1 mx-auto mt-8 px-4">
         <ChecklistNameSection></ChecklistNameSection>
         <div class="w-full border border-cyan-900 my-5"></div>
         <ChecklistItemsSection></ChecklistItemsSection>
@@ -37,7 +37,7 @@ if (appElement) {
 
         <ChecklistCopyLink v-if="store.id"></ChecklistCopyLink>
         <ChecklistCreateButton v-if="!store.id"></ChecklistCreateButton>
-    </div>
+    </section>
 </template>
 
 <style scoped>

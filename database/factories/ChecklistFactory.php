@@ -17,7 +17,7 @@ class ChecklistFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => \Str::random(40),
         ];
     }
 }

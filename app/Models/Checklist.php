@@ -20,8 +20,6 @@ class Checklist extends Model
         'type' => ChecklistType::Default,
         'modification_access' => ModificationAccess::Public,
         'visibility' => Visibility::Public,
-        'created_by_id' => null,
-        'updated_by_id' => null,
     ];
 
     protected $guarded = [
