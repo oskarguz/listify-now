@@ -67,7 +67,7 @@ export const useChecklistStore = defineStore('checklist', () => {
                 id.value = checklist.id;
                 items.value = checklist.items;
 
-                localStorageApi.addChecklistId(checklist.id);
+                localStorageApi.addChecklistId(checklist.id, checklist.name);
 
                 result.message = 'List has been created';
                 return resolve(result);
