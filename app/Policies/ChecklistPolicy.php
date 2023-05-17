@@ -10,11 +10,7 @@ class ChecklistPolicy
 {
     public function view(?User $user, Checklist $checklist): bool
     {
-        if (!$checklist->created_by_id) {
-            return true;
-        }
-
-        return $user?->id === $checklist->created_by_id;
+        return true;
     }
 
     public function create(?User $user): bool
@@ -24,11 +20,7 @@ class ChecklistPolicy
 
     public function update(?User $user, Checklist $checklist): bool
     {
-        if (!$checklist->created_by_id) {
-            return true;
-        }
-
-        return $user?->id === $checklist->created_by_id;
+        return true;
     }
 
     public function delete(?User $user, Checklist $checklist): bool

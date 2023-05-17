@@ -41,7 +41,7 @@ class ChecklistPolicyTest extends TestCase
         \Auth::logout();
 
         $this->postJson("/checklist/$checklist->id/update", Checklist::factory()->definition())
-            ->assertForbidden();
+            ->assertOk();
     }
 
     public function test_can_view(): void
@@ -63,7 +63,7 @@ class ChecklistPolicyTest extends TestCase
         \Auth::logout();
 
         $this->get("/checklist/$checklist->id")
-            ->assertForbidden();
+            ->assertOk();
     }
 
     public function test_can_delete(): void
@@ -93,7 +93,7 @@ class ChecklistPolicyTest extends TestCase
         \Auth::logout();
 
         $this->postJson("/checklist/$checklist->id/items/create", ChecklistItem::factory()->definition())
-            ->assertForbidden();
+            ->assertOk();
     }
 
     public function test_can_update_item(): void
@@ -127,7 +127,7 @@ class ChecklistPolicyTest extends TestCase
         $this->postJson(
             "/checklist/$checklist->id/items/$item->id/update",
             ChecklistItem::factory()->definition()
-        )->assertForbidden();
+        )->assertOk();
     }
 
     public function test_can_delete_item(): void
@@ -163,6 +163,6 @@ class ChecklistPolicyTest extends TestCase
         $this->postJson(
             "/checklist/$checklist->id/items/$item->id/destroy",
             ChecklistItem::factory()->definition()
-        )->assertForbidden();
+        )->assertOk();
     }
 }
