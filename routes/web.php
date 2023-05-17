@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SecurityController;
 use App\Models\Checklist;
+use App\Models\ChecklistItem;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,9 +44,15 @@ Route::controller(ChecklistController::class)->prefix('/checklist')->group(funct
 });
 
 Route::controller(ChecklistItemController::class)->prefix('/checklist/{checklist}/items')->group(function () {
-    Route::post('/create', 'store');
-    Route::post('/{checklistItem}/update', 'update');
-    Route::post('/{checklistItem}/destroy', 'destroy');
+    Route::post('/create', 'store')
+        ->can('create', [ChecklistItem::class, 'checklist']);
+
+    Route::post('/{checklistItem}/update', 'update')
+        ->can('update', [ChecklistItem::class, 'checklist', 'checklistItem']);
+
+    Route::post('/{checklistItem}/destroy', 'destroy')
+        ->can('delete', [ChecklistItem::class, 'checklist', 'checklistItem']);
+
 })->middleware('onlyXhr');
 
 Route::controller(SecurityController::class)->group(function () {

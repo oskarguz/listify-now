@@ -17,7 +17,8 @@ class ChecklistItemFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'description' => \Str::random(30),
+            'checked' => fake()->boolean(),
         ];
     }
 }
