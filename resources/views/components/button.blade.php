@@ -6,9 +6,9 @@
 
 @php
     $colors = [
-        'primary' => 'bg-blue-500 hover:bg-blue-700',
-        'secondary' => 'bg-gray-500 hover:bg-gray-700',
-        'green' => 'bg-green-600 hover:bg-green-700',
+        'primary' => 'bg-contrast ring-white hover:ring-orange-400',
+        'secondary' => 'bg-background-secondary ring ring-white hover:ring-orange-400',
+        'green' => 'bg-green-600 ring ring-green-400 hover:ring-green-500',
         'transparent' => '',
     ];
 @endphp

@@ -97,7 +97,7 @@ watch(checked, async (newChecked, oldChecked) => {
 </script>
 
 <template>
-    <div class="bg-gray-300 flex rounded-lg overflow-hidden">
+    <div class="bg-white flex rounded-lg overflow-hidden">
         <div class="p-2 flex-grow flex">
             <input v-model="checked" type="checkbox" class="p-3 me-2">
             <div class="flex-grow content-grow">

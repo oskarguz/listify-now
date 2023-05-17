@@ -7,17 +7,18 @@
 
     <section class="container columns-1 mx-auto mt-8 px-4">
         @auth
-            <article class="flex">
-                <div class="w-1/3 flex justify-center">
+            <article class="flex p-4 bg-background-light rounded drop-shadow-xl">
+                <div class="">
                     <img class="h-full" src="{{ asset(auth()->user()->avatar ?: 'images/home/image_2.svg') }}">
                 </div>
-                <div class="w-2/3 flex self-center text-xl font-bold">
+                <div class="ml-8 self-center text-xl font-bold">
                     You’re logged in as {{ auth()->user()->name }}
                 </div>
             </article>
 
-            <article class="justify-center my-14">
-                <h3 class="font-extrabold text-xl">Your checklists</h3>
+            <article class="justify-center my-14 bg-background-light rounded p-4 drop-shadow-xl">
+                <h3 class="font-extrabold text-xl my-1">Your checklists</h3>
+                <div class="w-full border border-black"></div>
                 {{--  @TODO add filtering by dates, search text input  --}}
                 <table class="display" id="checklistsDatatables" style="width:100%">
                     <thead>
@@ -42,14 +43,15 @@
             </article>
         @endauth
 
-        <article id="localStorageChecklistsDatatableContainer" style="display: none;">
+        <article class="bg-background-light rounded p-4 drop-shadow-xl" id="localStorageChecklistsDatatableContainer" style="display: none;">
             <h3 class="font-extrabold text-xl">Checklists created on this device (anonymously)</h3>
+            <div class="w-full border border-black my-1"></div>
             <table class="display" id="localStorageChecklistsDatatable"></table>
         </article>
 
         @guest
-            <article class="my-16 flex flex-col">
-                <h3 class="font-extrabold text-xl">
+            <article class="my-16 flex flex-col bg-background-contrast rounded p-4 drop-shadow-xl ring ring-background-primary">
+                <h3 class="font-extrabold text-xl text-center">
                     Don’t see your list? Or created a list anonymously and want to assign it to your account?
                 </h3>
                 <x-button type="link"
@@ -57,7 +59,7 @@
                           class="rounded-lg align-baseline text-xl mx-auto mt-4"
                           href="{{ url('/login') }}"
                 >
-                    <i class="fi fi-rr-security"></i> Login
+                    <i class="fi fi-rr-sign-in-alt"></i> Login
                 </x-button>
             </article>
         @endguest

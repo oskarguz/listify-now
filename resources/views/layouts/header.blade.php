@@ -1,24 +1,23 @@
-<nav class="flex justify-between p-4 bg-gray-300">
+<nav class="flex justify-between p-4 bg-background-secondary text-white fixed w-full ring ring-background-primary drop-shadow-xl" style="z-index: 1000;">
     <h2 class="align-middle text-xl font-semibold leading-10">
-        <a href="{{ url('/') }}">
+        <a href="{{ url('/') }}" class=" hover:underline hover:underline-offset-8 hover:text-background-contrast">
             Listify Now
         </a>
     </h2>
-    <div>
+    <div class="flex">
         <x-button type="link"
-                  variant="green"
-                  class="rounded-lg align-baseline me-3 text-xl"
+                  variant="transparent"
+                  class="rounded-lg self-center me-3 text-sm hover:underline hover:underline-offset-8 hover:text-background-contrast"
                   href="{{ url('/checklist/create') }}"
         >
             <i class="fi fi-br-plus"></i> Create
         </x-button>
         <x-button type="link"
                   variant="transparent"
-                  text-color="black"
-                  class="!p-0 text-3xl"
+                  class="rounded-lg text-sm hover:underline hover:underline-offset-8 hover:text-background-contrast"
                   href="{{ url('/dashboard') }}"
         >
-            <i class="fi fi-ss-user"></i>
+            <i class="fi fi-ss-user"></i> Profile
         </x-button>
     </div>
 </nav>

@@ -439,7 +439,7 @@ table.dataTable td {
     float: left;
 }
 .dataTables_wrapper .dataTables_length select {
-    border: 1px solid #aaa;
+    border: 1px solid #ff7500;
     border-radius: 3px;
     padding: 5px;
     background-color: transparent;
@@ -450,7 +450,7 @@ table.dataTable td {
     text-align: right;
 }
 .dataTables_wrapper .dataTables_filter input {
-    border: 1px solid #aaa;
+    border: 1px solid #ff7500;
     border-radius: 3px;
     padding: 5px;
     background-color: transparent;
@@ -499,7 +499,7 @@ table.dataTable td {
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
     cursor: default;
-    color: #666 !important;
+    color: #000000 !important;
     border: 1px solid transparent;
     background: transparent;
     box-shadow: none;

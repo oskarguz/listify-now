@@ -9,18 +9,18 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
+        <link href="https://fonts.bunny.net/css?family=mulish:400,500,600&display=swap" rel="stylesheet"/>
         {{ $css ?? '' }}
 
         <!-- Scripts -->
         @vite(['resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 flex flex-col">
+        <div class="min-h-screen bg-background-primary flex flex-col">
             @include('layouts.header')
 
             <!-- Page Content -->
-            <main class="flex-1 flex flex-wrap">
+            <main class="flex-1 flex flex-wrap pt-16">
                 {{ $slot }}
             </main>
 
