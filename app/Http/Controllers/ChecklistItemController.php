@@ -14,9 +14,13 @@ class ChecklistItemController extends Controller
      */
     public function store(StoreChecklistItemRequest $request, Checklist $checklist)
     {
+        $user = \Auth::user();
         $validated = $request->validated();
 
         $item = new ChecklistItem($validated);
+        $item->createdBy()->associate($user);
+        $item->updatedBy()->associate($user);
+
         $checklist->items()->save($item);
 
         return $item->toArray();

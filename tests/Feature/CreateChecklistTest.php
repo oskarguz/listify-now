@@ -1,6 +1,8 @@
 <?php
 
 
+use App\Models\Checklist;
+use App\Models\ChecklistItem;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -20,7 +22,10 @@ class CreateChecklistTest extends TestCase
             'id', 'name', 'items'
         ]);
 
-        $this->assertDatabaseHas('checklists', ['name' => 'lorem ipsum']);
+        $this->assertDatabaseHas('checklists', [
+            'name' => 'lorem ipsum',
+            'created_by_id' => null,
+        ]);
         $this->assertDatabaseCount('checklists', 1);
     }
 
@@ -47,9 +52,15 @@ class CreateChecklistTest extends TestCase
         $this->assertArrayHasKey('description', $item);
         $this->assertArrayHasKey('checked', $item);
 
-        $this->assertDatabaseHas('checklists', ['name' => 'lorem ipsum']);
+        $this->assertDatabaseHas('checklists', [
+            'name' => 'lorem ipsum',
+            'created_by_id' => null,
+        ]);
         $this->assertDatabaseCount('checklists', 1);
-        $this->assertDatabaseHas('checklist_items', ['description' => 'test description']);
+        $this->assertDatabaseHas('checklist_items', [
+            'description' => 'test description',
+            'created_by_id' => null
+        ]);
         $this->assertDatabaseCount('checklist_items', 1);
     }
 
@@ -151,6 +162,36 @@ class CreateChecklistTest extends TestCase
         $this->assertDatabaseCount('checklist_items', 1);
         $this->assertDatabaseHas('checklist_items', [
             'created_by_id' => $user->id,
+        ]);
+    }
+
+    public function test_cannot_create_for_other_user(): void
+    {
+        $loggedUser = User::factory()->create();
+
+        Auth::login($loggedUser);
+
+        $otherUser = User::factory()->create();
+
+        $checklist = Checklist::factory()->definition();
+        $checklist['created_by_id'] = $otherUser->id;
+
+        $item = ChecklistItem::factory()->definition();
+        $item['created_by_id'] = $otherUser->id;
+
+        $checklist['items'] = [$item];
+        $this->postJson('/checklist/create', $checklist)->assertOk();
+
+        $this->assertDatabaseCount('checklists', 1);
+        $this->assertDatabaseHas('checklists', [
+            'name' => $checklist['name'],
+            'created_by_id' => $loggedUser->id,
+        ]);
+
+        $this->assertDatabaseCount('checklist_items', 1);
+        $this->assertDatabaseHas('checklist_items', [
+            'description' => $item['description'],
+            'created_by_id' => $loggedUser->id,
         ]);
     }
 }

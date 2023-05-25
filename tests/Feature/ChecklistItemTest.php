@@ -2,6 +2,8 @@
 
 
 use App\Models\Checklist;
+use App\Models\ChecklistItem;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -22,6 +24,28 @@ class ChecklistItemTest extends TestCase
 
         $this->assertDatabaseCount('checklist_items', 1);
         $this->assertDatabaseHas('checklist_items', ['description' => $item['description']]);
+    }
+
+    public function test_create_item_as_authenticated_user(): void
+    {
+        $user = User::factory()->create();
+        $checklist = Checklist::factory()
+            ->for($user, 'createdBy')
+            ->create();
+
+        Auth::login($user);
+
+        $response = $this->postJson("/checklist/$checklist->id/items/create", ChecklistItem::factory()->definition());
+        $response->assertOk();
+
+        $item = $response->json();
+
+        $this->assertDatabaseCount('checklist_items', 1);
+        $this->assertDatabaseHas('checklist_items', [
+            'description' => $item['description'],
+            'created_by_id' => $user->id,
+        ]);
+        $this->assertSame($user->id, $item['created_by_id']);
     }
 
     public function test_update_item(): void
