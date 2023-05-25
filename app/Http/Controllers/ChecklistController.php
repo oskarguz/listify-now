@@ -77,6 +77,20 @@ class ChecklistController extends Controller
      */
     public function destroy(Checklist $checklist)
     {
-        abort(Response::HTTP_NOT_FOUND);
+        if ($checklist->created_by_id === null) {
+            abort(Response::HTTP_FORBIDDEN);
+        }
+
+        if (!\Auth::check()) {
+            abort(Response::HTTP_FORBIDDEN);
+        }
+
+        if (\Auth::id() !== $checklist->created_by_id) {
+            abort(Response::HTTP_FORBIDDEN);
+        }
+
+        $checklist->delete();
+
+        return \response(['status' => 'OK']);
     }
 }

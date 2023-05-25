@@ -68,8 +68,23 @@ class ChecklistPolicyTest extends TestCase
 
     public function test_can_delete(): void
     {
-        $this->markTestIncomplete();
-        // @TODO not implemented yet
+        $checklist = Checklist::factory()->create();
+
+        $this->postJson("/checklist/$checklist->id/destroy")
+            ->assertForbidden();
+
+        $user = User::factory()->create();
+        $checklist = Checklist::factory()
+            ->for($user, 'createdBy')
+            ->create();
+
+        $this->postJson("/checklist/$checklist->id/destroy")
+            ->assertForbidden();
+
+        \Auth::login($user);
+
+        $this->postJson("/checklist/$checklist->id/destroy")
+            ->assertOk();
     }
 
     public function test_can_create_item(): void
