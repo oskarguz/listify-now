@@ -23,3 +23,7 @@ export function updateItemChecked(checklistId, id, checked) {
 export function deleteItem(checklistId, id) {
     return axios.post(`/checklist/${checklistId}/items/${id}/destroy`);
 }
+
+export function deleteChecklist(checklistId) {
+    return axios.post(`/checklist/${checklistId}/destroy`);
+}

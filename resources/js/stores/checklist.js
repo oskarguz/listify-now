@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import { computed, ref, watch } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import * as api from "../api/checklistApi";
 import * as localStorageApi from '../api/localStorageApi';
 import { useAuthStore } from "./auth";
@@ -7,6 +7,10 @@ import { useAuthStore } from "./auth";
 export const useChecklistStore = defineStore('checklist', () => {
     const id = ref(null);
     const name = ref('New list');
+    const createdBy = reactive({
+        id: '',
+        name: '',
+    });
     const items = ref([]);
 
     const pendingRequestsCount = ref(0);
@@ -25,6 +29,7 @@ export const useChecklistStore = defineStore('checklist', () => {
     // GETTERS
     const hasPendingRequest = computed(() => pendingRequestsCount.value > 0)
     const getUrl = computed(() => url.value);
+    const isCreatedByMe = computed(() => auth.isLogged && createdBy.id && auth.getId === createdBy.id)
 
     // WATCHERS
     watch(id, async (newId, oldId) => {
@@ -50,6 +55,8 @@ export const useChecklistStore = defineStore('checklist', () => {
     function $reset() {
         id.value = null;
         name.value = '';
+        createdBy.id = '';
+        createdBy.name = '';
         items.value = [];
         pendingRequestsCount.value = 0;
     }
@@ -68,6 +75,8 @@ export const useChecklistStore = defineStore('checklist', () => {
                 let checklist = response.data;
 
                 id.value = checklist.id;
+                createdBy.id = checklist?.created_by?.id || '';
+                createdBy.name = checklist?.created_by?.name || '';
                 items.value = checklist.items;
 
                 if (!auth.isLogged) {
@@ -105,6 +114,8 @@ export const useChecklistStore = defineStore('checklist', () => {
             api.updateName(id.value, name.value).then(() => {
                 modifyPendingRequestsCount(-1);
 
+                localStorageApi.addChecklistId(id.value, name.value);
+
                 result.message = 'Name has been updated';
                 return resolve(result);
             }).catch((err) => {
@@ -131,6 +142,10 @@ export const useChecklistStore = defineStore('checklist', () => {
         }
         if (checklist.hasOwnProperty('items')) {
             items.value = checklist.items;
+        }
+        if (checklist.hasOwnProperty('created_by')) {
+            createdBy.id = checklist.created_by?.id || '';
+            createdBy.name = checklist.created_by?.name || '';
         }
     }
 
@@ -165,6 +180,31 @@ export const useChecklistStore = defineStore('checklist', () => {
                 return reject(result);
             })
         });
+    }
+
+    async function deleteChecklist() {
+        if (!id.value) {
+            return false;
+        }
+        if (!auth.isLogged) {
+            return false;
+        }
+
+        try {
+            await api.deleteChecklist(id.value);
+
+            return true;
+        } catch (err) {
+            let error;
+            if (err.response) {
+                error = err.response.data.message;
+            }
+            if (!error) {
+                error.message = err.message || String(err);
+            }
+
+            throw error;
+        }
     }
 
     function deleteItem(itemId) {
@@ -256,7 +296,7 @@ export const useChecklistStore = defineStore('checklist', () => {
         });
     }
 
-    return { id, name, items, hasPendingRequest, getUrl, $reset, create, updateName, init, createItem, deleteItem, updateItemDescription, updateItemChecked };
+    return { id, name, createdBy, items, hasPendingRequest, getUrl, isCreatedByMe, $reset, create, updateName, init, createItem, deleteChecklist, deleteItem, updateItemDescription, updateItemChecked };
 });
 
 if (import.meta.hot) {

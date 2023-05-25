@@ -23,19 +23,25 @@
                 <table class="display" id="checklistsDatatables" style="width:100%">
                     <thead>
                         <tr>
-                            <th class="text-center">Name</th>
-                            <th class="text-center">Creation date</th>
-                            <th class="text-center">Last update</th>
-                            <th class="text-center">Items count</th>
+                            <th style="text-align: center">Name</th>
+                            <th style="text-align: center">Creation date</th>
+                            <th style="text-align: center">Last update</th>
+                            <th style="text-align: center">Items count</th>
+                            <th style="text-align: center" data-sortable="false"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($checklists as $checklist)
                             <tr class="cursor-pointer" data-id="{{ $checklist->id }}">
-                                <td>{{ $checklist->name }}</td>
-                                <td>{{ $checklist->created_at->toDateTimeString() }}</td>
-                                <td>{{ $checklist->updated_at->toDateTimeString() }}</td>
-                                <td>{{ $checklist->items->count() }}</td>
+                                <td class="text-center">{{ $checklist->name }}</td>
+                                <td class="text-center">{{ $checklist->created_at->toDateTimeString() }}</td>
+                                <td class="text-center">{{ $checklist->updated_at->toDateTimeString() }}</td>
+                                <td class="text-center">{{ $checklist->items->count() }}</td>
+                                <td class="text-center">
+                                    <button class="bg-red-500 p-2 rounded deleteBtn">
+                                        <i class="fi-br-trash align-middle"></i>
+                                    </button>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -46,7 +52,7 @@
         <article class="bg-background-light rounded p-4 drop-shadow-xl" id="localStorageChecklistsDatatableContainer" style="display: none;">
             <h3 class="font-extrabold text-xl">Checklists created on this device (anonymously)</h3>
             <div class="w-full border border-black my-1"></div>
-            <table class="display" id="localStorageChecklistsDatatable"></table>
+            <table class="display" id="localStorageChecklistsDatatable" style="width:100%"></table>
         </article>
 
         @guest
