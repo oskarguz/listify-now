@@ -4,8 +4,11 @@ import ChecklistItemsSection from "./ChecklistItemsSection.vue";
 import ChecklistCopyLink from "./ChecklistCopyLink.vue";
 import { useChecklistStore } from "../stores/checklist";
 import ChecklistCreateButton from "./ChecklistCreateButton.vue";
+import { useAuthStore } from "../stores/auth";
 
 const store = useChecklistStore();
+const authStore = useAuthStore();
+authStore.refreshState();
 
 let appElement = document.getElementById('app');
 if (appElement) {
@@ -29,10 +32,9 @@ if (appElement) {
         <div class="w-full border border-black my-5"></div>
         <ChecklistItemsSection></ChecklistItemsSection>
 
-<!--   @TODO check whether user is auth    -->
-        <p class="mt-4 bg-background-contrast rounded-lg p-2">
+        <p v-if="!authStore.isLogged" class="mt-4 bg-background-contrast rounded-lg p-2">
             The list will be public, anyone with a link can access and edit,<br/>
-            If you want to access all features, <span class="font-bold">log in</span>
+            If you want to access all features, <a href="/login" class="font-bold">log in</a>
         </p>
 
         <ChecklistCopyLink v-if="store.id"></ChecklistCopyLink>

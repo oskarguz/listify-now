@@ -1,7 +1,8 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import {computed, ref, watch} from "vue";
+import { computed, ref, watch } from "vue";
 import * as api from "../api/checklistApi";
 import * as localStorageApi from '../api/localStorageApi';
+import { useAuthStore } from "./auth";
 
 export const useChecklistStore = defineStore('checklist', () => {
     const id = ref(null);
@@ -10,6 +11,8 @@ export const useChecklistStore = defineStore('checklist', () => {
 
     const pendingRequestsCount = ref(0);
     const url = ref(window.location.href);
+
+    const auth = useAuthStore();
 
     // PRIVATE METHODS
     function modifyPendingRequestsCount(value) {
@@ -67,7 +70,9 @@ export const useChecklistStore = defineStore('checklist', () => {
                 id.value = checklist.id;
                 items.value = checklist.items;
 
-                localStorageApi.addChecklistId(checklist.id, checklist.name);
+                if (!auth.isLogged) {
+                    localStorageApi.addChecklistId(checklist.id, checklist.name);
+                }
 
                 result.message = 'List has been created';
                 return resolve(result);

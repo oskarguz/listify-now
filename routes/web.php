@@ -61,3 +61,12 @@ Route::controller(SecurityController::class)->group(function () {
     Route::get('/auth', 'authRedirect')->name('security.auth');
     Route::get('/auth/callback', 'authCallback')->name('security.callback');
 });
+
+Route::get('/check-user', function () {
+    $user = Auth::user();
+    if (!$user) {
+        return abort(\Symfony\Component\HttpFoundation\Response::HTTP_FORBIDDEN);
+    }
+
+    return response()->json($user);
+});
