@@ -79,7 +79,7 @@ export const useChecklistStore = defineStore('checklist', () => {
                 createdBy.name = checklist?.created_by?.name || '';
                 items.value = checklist.items;
 
-                if (!auth.isLogged) {
+                if (!createdBy.id) {
                     localStorageApi.addChecklistId(checklist.id, checklist.name);
                 }
 
@@ -114,7 +114,9 @@ export const useChecklistStore = defineStore('checklist', () => {
             api.updateName(id.value, name.value).then(() => {
                 modifyPendingRequestsCount(-1);
 
-                localStorageApi.addChecklistId(id.value, name.value);
+                if (!createdBy.id) {
+                    localStorageApi.addChecklistId(id.value, name.value);
+                }
 
                 result.message = 'Name has been updated';
                 return resolve(result);
