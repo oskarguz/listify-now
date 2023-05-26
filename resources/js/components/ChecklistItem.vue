@@ -2,6 +2,8 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useChecklistStore } from "../stores/checklist";
 
+const UPDATE_DESCRIPTION_DELAY_IN_SECONDS = 1;
+
 const store = useChecklistStore();
 const textAreaInp = ref(null);
 
@@ -17,12 +19,22 @@ const description = ref(props.description || '');
 const position = ref(props.position || 0);
 const checked = ref(props.checked);
 
-const isNewItem = computed(() => {
-    return !id.value;
-});
+const isNewItem = computed(() => !id.value);
 
+let timer = null;
 function onTextAreaInput(e) {
-    description.value = textAreaInp.value.value;
+    if (timer) {
+        clearTimeout(timer);
+    }
+
+    if (isNewItem.value) {
+        description.value = textAreaInp.value.value;
+    } else {
+        timer = setTimeout(() => {
+            description.value = textAreaInp.value.value;
+        }, UPDATE_DESCRIPTION_DELAY_IN_SECONDS * 1000);
+    }
+
     adjustTextareaHeight(textAreaInp.value);
 }
 
@@ -92,7 +104,6 @@ watch(checked, async (newChecked, oldChecked) => {
     }).catch((error) => {
         console.error(error.message);
     });
-
 });
 </script>
 
