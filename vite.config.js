@@ -7,6 +7,9 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/js/app.js',
+                'resources/js/pages/checklist_form.js',
+                'resources/js/pages/dashboard.js',
+                'resources/css/datatables.css'
             ],
             refresh: true,
         }),
