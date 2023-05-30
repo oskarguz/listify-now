@@ -1,6 +1,8 @@
 import {createTable} from "../api/tableApi";
 import * as localStorageApi from '../api/localStorageApi';
 import * as checklistApi from '../api/checklistApi';
+import Swal from "sweetalert2";
+import Toastify from 'toastify-js';
 
 const CHECKLIST_TABLE_ID = 'checklistsDatatables';
 const CHECKLIST_FROM_LOCAL_STORAGE_TABLE_ID = 'localStorageChecklistsDatatable';
@@ -51,10 +53,24 @@ window.addEventListener('DOMContentLoaded', (e) => {
             const id = targetRow.dataset.id;
             if (isDeleteBtn) {
                 try {
-                    if (confirm('Are you sure?')) { // @TODO replace with some nice alerts :)
-                        checklistApi.deleteChecklist(id);
-                        checklistTable.row(targetRow).remove().draw();
-                    }
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#653d29',
+                        confirmButtonText: 'Yes, delete it!',
+                        reverseButtons: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            checklistApi.deleteChecklist(id);
+                            checklistTable.row(targetRow).remove().draw();
+
+                            Toastify({
+                                text: 'Checklist has been deleted',
+                            }).showToast();
+                        }
+                    });
                 } catch (e) {
                     console.error(e);
                 }
@@ -73,10 +89,24 @@ window.addEventListener('DOMContentLoaded', (e) => {
             const id = targetRow.dataset.id;
             if (isDeleteBtn) {
                 try {
-                    if (confirm('Are you sure?')) { // @TODO replace with some nice alerts :)
-                        localStorageApi.removeChecklistId(id);
-                        checklistTableFromLocalStorage.row(targetRow).remove().draw();
-                    }
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#653d29',
+                        confirmButtonText: 'Yes, delete it!',
+                        reverseButtons: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorageApi.removeChecklistId(id);
+                            checklistTableFromLocalStorage.row(targetRow).remove().draw();
+
+                            Toastify({
+                                text: 'Checklist has been deleted',
+                            }).showToast();
+                        }
+                    });
                 } catch (e) {
                     console.error(e);
                 }

@@ -19,6 +19,8 @@
         "@flaticon/flaticon-uicons": "^2.0.1",
         "datatables.net-dt": "^1.13.4",
         "pinia": "^2.0.35",
+        "sweetalert2": "^11.7.5",
+        "toastify-js": "^1.12.0",
         "vue": "^3.2.47"
     }
 }

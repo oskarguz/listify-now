@@ -3,6 +3,7 @@
 import { ref } from "vue";
 import { useChecklistStore } from "../stores/checklist";
 import { storeToRefs } from "pinia";
+import Swal from "sweetalert2";
 
 const checklistStore = useChecklistStore();
 
@@ -40,8 +41,17 @@ async function deleteChecklist() {
         return;
     }
 
-    let c = confirm('Are you sure?'); // @TODO replace with some nice alerts :)
-    if (!c) {
+    const { isConfirmed } = await Swal.fire({
+        title: 'Are you sure?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#653d29',
+        confirmButtonText: 'Yes, delete it!',
+        reverseButtons: true,
+    });
+
+    if (!isConfirmed) {
         return;
     }
 
@@ -49,7 +59,6 @@ async function deleteChecklist() {
     try {
         await checklistStore.deleteChecklist();
 
-        alert('Checklist has been deleted!'); // @TODO replace with some nice alerts :)
         window.location.replace('/dashboard');
     } catch (error) {
         console.error(error);

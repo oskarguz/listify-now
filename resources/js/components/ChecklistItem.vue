@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useChecklistStore } from "../stores/checklist";
+import Swal from "sweetalert2";
 
 const UPDATE_DESCRIPTION_DELAY_IN_SECONDS = 1;
 
@@ -70,6 +71,8 @@ function resetValues() {
     description.value = props.description || '';
     position.value = props.position || 0;
     checked.value = props.checked;
+
+    textAreaInp.value.focus();
 }
 
 onMounted(() => {
@@ -102,7 +105,7 @@ watch(checked, async (newChecked, oldChecked) => {
     store.updateItemChecked(id.value, newChecked).then((result) => {
         console.log(result.message);
     }).catch((error) => {
-        console.error(error.message);
+        Swal.fire('Error', error, 'error');
     });
 });
 </script>
