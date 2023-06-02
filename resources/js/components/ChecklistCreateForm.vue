@@ -32,16 +32,21 @@ if (appElement) {
         <div class="w-full border border-black my-5"></div>
         <ChecklistItemsSection></ChecklistItemsSection>
 
-        <p v-if="!authStore.isLogged" class="mt-4 bg-background-contrast rounded-lg p-2">
-            The list will be public, anyone with a link can access and edit,<br/>
-            If you want to access all features, <a href="/login" class="font-bold">log in</a>
+        <p v-if="!authStore.isLogged" class="mt-4 bg-background-contrast rounded-lg p-2 font-semibold">
+            <i class="fi fi-br-info text-xl"></i>
+            This list will be public, anyone with a link can access and edit,<br/>
+            If you want to access all features, <a href="/login" class="font-bold underline upper">log in</a>
         </p>
 
-        <ChecklistCopyLink v-if="store.id"></ChecklistCopyLink>
+        <ChecklistCopyLink class="mt-6" v-if="store.id"></ChecklistCopyLink>
         <ChecklistCreateButton v-if="!store.id"></ChecklistCreateButton>
     </section>
 </template>
 
 <style scoped>
-
+p {
+    -webkit-box-shadow: 0px 0px 11px -2px rgba(102, 61, 41, 1);
+    -moz-box-shadow: 0px 0px 11px -2px rgba(102, 61, 41, 1);
+    box-shadow: 0px 0px 11px -2px rgba(102, 61, 41, 1);
+}
 </style>

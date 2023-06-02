@@ -16,7 +16,7 @@
                 <img class="h-full" src="{{ asset('images/home/image_2.svg') }}">
             </article>
             <article class="w-full flex flex-col justify-center px-4">
-                <p class="text-center font-semibold text-lg md:text-2xl">Create shopping list in the fly</p>
+                <p class="text-center font-semibold text-lg md:text-2xl">Create shopping list on the fly</p>
             </article>
         </div>
     </section>
@@ -39,7 +39,7 @@
             <p class="text-center font-semibold md:text-lg">Create list with form here:</p>
             <x-button href="{{ url('/checklist/create') }}" type="link" variant="secondary" class="w-2/3 mx-auto text-center rounded-lg">Create list</x-button>
             <p class="text-center font-bold md:text-lg">OR</p>
-            <p class="text-center font-semibold md:text-lg">Paste your text here. Each new line generates a new checkbox on the list:</p>
+            <p class="text-center font-semibold md:text-lg">Paste your text here. Each new line generates a new entry on the list:</p>
             <textarea class="bg-background-light font-semibold border-0 ring ring-white hover:ring-orange-400 focus:ring focus:ring-orange-400 rounded" rows="5" placeholder="{{ "First item on the list,\nSecond item on the list,\n....\n...\n.." }}"></textarea>
         </article>
     </section>

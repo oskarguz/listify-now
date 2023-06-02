@@ -85,7 +85,7 @@ async function deleteChecklist() {
         </div>
         <div v-if="checklistStore.isCreatedByMe" class="ml-auto mt-auto flex">
             <div class="border border-l-2 mr-4 border-black"></div>
-            <button @click="deleteChecklist" class="bg-red-500 px-2 h-[40px] rounded font-bold text-sm">
+            <button @click="deleteChecklist" class="bg-red-500 px-2 h-[40px] rounded font-bold text-sm text-white hover:text-background-contrast hover:bg-red-600">
                 DELETE <i class="fi-br-trash align-middle"></i>
             </button>
         </div>

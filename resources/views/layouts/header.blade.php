@@ -19,5 +19,14 @@
         >
             <i class="fi fi-ss-user"></i> Profile
         </x-button>
+        @auth
+            <x-button type="link"
+                      variant="transparent"
+                      class="rounded-lg text-sm hover:underline hover:underline-offset-8 hover:text-background-contrast text-red-200"
+                      href="{{ url('/logout') }}"
+            >
+                <i class="fi fi-ss-exit"></i> Logout
+            </x-button>
+        @endauth
     </div>
 </nav>

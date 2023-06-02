@@ -17,7 +17,7 @@
             </article>
 
             <article class="justify-center my-14 bg-background-light rounded p-4 drop-shadow-xl">
-                <h3 class="font-extrabold text-xl my-1">Your checklists</h3>
+                <h3 class="font-extrabold text-xl my-1">Your lists</h3>
                 <div class="w-full border border-black"></div>
                 {{--  @TODO add filtering by dates, search text input  --}}
                 <table class="display" id="checklistsDatatables" style="width:100%">
@@ -50,7 +50,7 @@
         @endauth
 
         <article class="bg-background-light rounded p-4 drop-shadow-xl" id="localStorageChecklistsDatatableContainer" style="display: none;">
-            <h3 class="font-extrabold text-xl">Checklists created on this device (anonymously)</h3>
+            <h3 class="font-extrabold text-xl">Lists created on this device (anonymously)</h3>
             <div class="w-full border border-black my-1"></div>
             <table class="display" id="localStorageChecklistsDatatable" style="width:100%"></table>
         </article>

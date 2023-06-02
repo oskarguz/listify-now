@@ -10,6 +10,7 @@
         'secondary' => 'bg-background-secondary ring ring-white hover:ring-orange-400',
         'green' => 'bg-green-600 ring ring-green-400 hover:ring-green-500',
         'transparent' => '',
+        'login' => 'bg-orange-400 ring ring-white hover:ring-background-secondary hover:text-background-secondary',
     ];
 @endphp
 

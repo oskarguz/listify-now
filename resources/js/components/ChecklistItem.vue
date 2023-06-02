@@ -113,20 +113,20 @@ watch(checked, async (newChecked, oldChecked) => {
 <template>
     <div class="bg-white flex rounded-lg overflow-hidden">
         <div class="p-2 flex-grow flex">
-            <input v-model="checked" type="checkbox" class="p-3 me-2">
+            <input v-model="checked" type="checkbox" class="p-3 me-2 bg-background-secondary text-background-secondary">
             <div class="flex-grow content-grow">
                 <textarea @input="onTextAreaInput"
                           :value="(description || '')"
                           ref="textAreaInp"
-                          class="w-full"
+                          class="w-full text-background-secondary font-semibold"
                           rows="1">
                 </textarea>
             </div>
         </div>
-        <button v-if="!isNewItem" @click="deleteItem" class="bg-red-500 w-[40px] text-xl">
+        <button v-if="!isNewItem" @click="deleteItem" class="bg-red-500 w-[40px] text-white hover:text-background-contrast hover:bg-red-600 text-xl">
             <i class="fi-br-trash"></i>
         </button>
-        <button v-if="isNewItem" @click="addItem" class="bg-green-500 w-[40px] text-xl">
+        <button v-if="isNewItem" @click="addItem" class="bg-green-600 w-[40px] text-white hover:text-background-contrast hover:bg-green-700 text-xl">
             <i class="fi-br-plus"></i>
         </button>
     </div>
@@ -146,10 +146,9 @@ textarea {
 input[type="checkbox"] {
     border: none;
     border-radius: 25%;
-    background-color: #909090;
     --tw-ring-color: none;
     &:checked {
-        background-color: #909090;
+
     }
 }
 </style>
