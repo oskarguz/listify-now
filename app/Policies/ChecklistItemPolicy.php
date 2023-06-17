@@ -27,6 +27,6 @@ class ChecklistItemPolicy
 
     public function delete(?User $user, Checklist $checklist, ChecklistItem $checklistItem): bool
     {
-        return true;
+        return $this->checklistPolicy->update($user, $checklist);
     }
 }

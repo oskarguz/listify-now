@@ -18,7 +18,7 @@ that`s the current, live version. Available here: https://listify.bieda.it/
 
 ## TODOs
 1. [ ] there is a text input on home page, a quick way to create a list, make it works :)
-2. [ ] new list type: <strong>personal (private)</strong>. View and edit rights allowed only for list's owner,
+2. [x] new list type: <strong>personal (private)</strong>. View and edit rights allowed only for list's owner,
 3. [ ] a way to allow any user to view and/or edit personal lists (list privileges system),
 4. [ ] maybe new types of lists with richer content (images/videos),
 5. [ ] and more...

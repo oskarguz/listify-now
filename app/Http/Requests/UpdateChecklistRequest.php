@@ -2,10 +2,15 @@
 
 namespace App\Http\Requests;
 
+use App\Enum\Visibility;
+use App\Rules\Checklist\VisibilityValidation;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateChecklistRequest extends FormRequest
 {
+    protected $stopOnFirstFailure = true;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -22,7 +27,8 @@ class UpdateChecklistRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:400',
+            'name' => 'required_with:name|string|max:400',
+            'visibility' => ['bail', 'required_with:visibility', Rule::enum(Visibility::class), new VisibilityValidation()]
         ];
     }
 }

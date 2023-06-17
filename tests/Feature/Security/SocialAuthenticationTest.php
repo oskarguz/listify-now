@@ -1,6 +1,8 @@
 <?php
 
 
+namespace Security;
+
 use App\Enum\SocialAuthenticationDriver;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Socialite\Facades\Socialite;

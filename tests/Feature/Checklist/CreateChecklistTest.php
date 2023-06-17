@@ -1,10 +1,15 @@
 <?php
 
 
+namespace Checklist;
+
+use App\Enum\Visibility;
 use App\Models\Checklist;
 use App\Models\ChecklistItem;
 use App\Models\User;
+use Auth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Str;
 use Tests\TestCase;
 
 class CreateChecklistTest extends TestCase
@@ -13,32 +18,40 @@ class CreateChecklistTest extends TestCase
 
     public function test_create_without_items(): void
     {
-        $response = $this->postJson('/checklist/create', [
-            'name' => 'lorem ipsum'
-        ]);
+        $definition = Checklist::factory()->definition();
+        $response = $this->postJson('/checklist/create', $definition);
 
         $response->assertOk();
         $response->assertJsonStructure([
-            'id', 'name', 'items'
+            'id', 'name', 'items', 'visibility'
         ]);
 
         $this->assertDatabaseHas('checklists', [
-            'name' => 'lorem ipsum',
+            'name' => $definition['name'],
             'created_by_id' => null,
+            'visibility' => $definition['visibility'],
         ]);
+        $this->assertDatabaseCount('checklists', 1);
+
+        $privateVisibility = Checklist::factory()->definition();
+        $privateVisibility['visibility'] = Visibility::Private->value;
+
+        $this->postJson('/checklist/create', $privateVisibility)
+            ->assertUnprocessable();
+
         $this->assertDatabaseCount('checklists', 1);
     }
 
     public function test_create_with_single_item(): void
     {
         $response = $this->postJson('/checklist/create', [
-           'name' => 'lorem ipsum',
-           'items' => [
-               [
-                   'description' => 'test description',
-                   'checked' => false,
-               ]
-           ]
+            'name' => 'lorem ipsum',
+            'items' => [
+                [
+                    'description' => 'test description',
+                    'checked' => false,
+                ]
+            ]
         ]);
 
         $response->assertOk();
@@ -119,9 +132,7 @@ class CreateChecklistTest extends TestCase
 
         Auth::login($user);
 
-        $response = $this->postJson('/checklist/create', [
-            'name' => 'lorem ipsum',
-        ]);
+        $response = $this->postJson('/checklist/create', Checklist::factory()->definition());
 
         $response->assertOk();
         $data = $response->json();
@@ -132,6 +143,21 @@ class CreateChecklistTest extends TestCase
         $this->assertDatabaseCount('checklists', 1);
         $this->assertDatabaseHas('checklists', [
             'created_by_id' => $user->id,
+            'visibility' => Visibility::Public->value
+        ]);
+
+        // create private list
+        $privateChecklist = Checklist::factory()->definition();
+        $privateChecklist['visibility'] = Visibility::Private->value;
+
+        $response = $this->postJson('/checklist/create', $privateChecklist);
+        $response->assertOk();
+
+        $data = $response->json();
+
+        $this->assertDatabaseHas('checklists', [
+            'id' => $data['id'],
+            'visibility' => $data['visibility']
         ]);
     }
 

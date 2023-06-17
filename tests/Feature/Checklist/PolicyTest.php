@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Checklist;
 
 use App\Models\Checklist;
 use App\Models\ChecklistItem;
@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ChecklistPolicyTest extends TestCase
+class PolicyTest extends TestCase
 {
     use RefreshDatabase;
 

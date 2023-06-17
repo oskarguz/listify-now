@@ -3,7 +3,12 @@
 namespace App\Http\Requests;
 
 
-class StoreChecklistRequest extends UpdateChecklistRequest
+use App\Enum\Visibility;
+use App\Rules\Checklist\VisibilityValidation;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class StoreChecklistRequest extends FormRequest
 {
     protected $stopOnFirstFailure = true;
 
@@ -22,13 +27,12 @@ class StoreChecklistRequest extends UpdateChecklistRequest
      */
     public function rules(): array
     {
-         return array_merge(
-            [
-                'items' => 'nullable|array',
-                'items.*.description' => 'required_with:items|string|max:400',
-                'items.*.checked' => 'required_with:items|boolean',
-            ],
-            parent::rules()
-        );
+         return [
+             'name' => 'required|string|max:400',
+             'visibility' => ['bail', 'required_with:visibility', Rule::enum(Visibility::class), new VisibilityValidation()],
+             'items' => 'nullable|array',
+             'items.*.description' => 'required_with:items|string|max:400',
+             'items.*.checked' => 'required_with:items|boolean',
+         ];
     }
 }

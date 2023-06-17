@@ -8,6 +8,10 @@ export function updateName(id, name) {
     return axios.post(`/checklist/${id}/update`, { name });
 }
 
+export function updateVisibility(id, visibility) {
+    return axios.post(`/checklist/${id}/update`, { visibility });
+}
+
 export function createItem(checklistId, item) {
     return axios.post(`/checklist/${checklistId}/items/create`, item);
 }

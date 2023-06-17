@@ -3,10 +3,12 @@ import { computed, reactive, ref, watch } from "vue";
 import * as api from "../api/checklistApi";
 import * as localStorageApi from '../api/localStorageApi';
 import { useAuthStore } from "./auth";
+import * as Visibility from "../enum/visibility";
 
 export const useChecklistStore = defineStore('checklist', () => {
     const id = ref(null);
     const name = ref('New list');
+    const visibility = ref(Visibility.PUBLIC);
     const createdBy = reactive({
         id: '',
         name: '',
@@ -26,10 +28,43 @@ export const useChecklistStore = defineStore('checklist', () => {
         }
     }
 
+    async function updateVisibility(value) {
+        if (value === visibility.value) {
+            return true;
+        }
+        if (!auth.isLogged) {
+            throw 'You must be logged in to change visibility';
+        }
+        if (!id.value) {
+            visibility.value = value;
+            return true;
+        }
+
+        try {
+            await api.updateVisibility(id.value, value);
+
+            visibility.value = value;
+
+            return true;
+        } catch (err) {
+            let error;
+            if (err.response) {
+                error = err.response.data.message;
+            }
+            if (!error) {
+                error = err.message || String(err);
+            }
+
+            throw error;
+        }
+    }
+
     // GETTERS
     const hasPendingRequest = computed(() => pendingRequestsCount.value > 0)
     const getUrl = computed(() => url.value);
     const isCreatedByMe = computed(() => auth.isLogged && createdBy.id && auth.getId === createdBy.id)
+    const isPublic = computed(() => visibility.value === Visibility.PUBLIC);
+    const isPrivate = computed(() => visibility.value === Visibility.PRIVATE);
 
     // WATCHERS
     watch(id, async (newId, oldId) => {
@@ -57,6 +92,7 @@ export const useChecklistStore = defineStore('checklist', () => {
         name.value = '';
         createdBy.id = '';
         createdBy.name = '';
+        visibility.value = Visibility.PUBLIC;
         items.value = [];
         pendingRequestsCount.value = 0;
     }
@@ -69,6 +105,7 @@ export const useChecklistStore = defineStore('checklist', () => {
             api.create({
                 name: name.value,
                 items: items.value,
+                visibility: visibility.value
             }).then((response) => {
                 modifyPendingRequestsCount(-1);
 
@@ -135,6 +172,14 @@ export const useChecklistStore = defineStore('checklist', () => {
         });
     }
 
+    async function setAsPublic() {
+        return updateVisibility(Visibility.PUBLIC);
+    }
+
+    async function setAsPrivate() {
+        return updateVisibility(Visibility.PRIVATE);
+    }
+
     function init(checklist) {
         if (checklist.hasOwnProperty('id')) {
             id.value = checklist.id;
@@ -148,6 +193,9 @@ export const useChecklistStore = defineStore('checklist', () => {
         if (checklist.hasOwnProperty('created_by')) {
             createdBy.id = checklist.created_by?.id || '';
             createdBy.name = checklist.created_by?.name || '';
+        }
+        if (checklist.hasOwnProperty('visibility')) {
+            visibility.value = checklist.visibility || Visibility.PUBLIC;
         }
     }
 
@@ -298,7 +346,28 @@ export const useChecklistStore = defineStore('checklist', () => {
         });
     }
 
-    return { id, name, createdBy, items, hasPendingRequest, getUrl, isCreatedByMe, $reset, create, updateName, init, createItem, deleteChecklist, deleteItem, updateItemDescription, updateItemChecked };
+    return {
+        id,
+        name,
+        createdBy,
+        items,
+        hasPendingRequest,
+        getUrl,
+        isCreatedByMe,
+        isPublic,
+        isPrivate,
+        $reset,
+        create,
+        updateName,
+        setAsPrivate,
+        setAsPublic,
+        init,
+        createItem,
+        deleteChecklist,
+        deleteItem,
+        updateItemDescription,
+        updateItemChecked
+    };
 });
 
 if (import.meta.hot) {

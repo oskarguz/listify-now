@@ -1,10 +1,14 @@
 <?php
 
 
+namespace Checklist;
+
 use App\Models\Checklist;
 use App\Models\ChecklistItem;
 use App\Models\User;
+use Auth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Str;
 use Tests\TestCase;
 
 class ChecklistItemTest extends TestCase

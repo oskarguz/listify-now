@@ -50,4 +50,14 @@ class Checklist extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function is_public(): bool
+    {
+        return $this->visibility === Visibility::Public;
+    }
+
+    public function is_private(): bool
+    {
+        return $this->visibility === Visibility::Private;
+    }
 }

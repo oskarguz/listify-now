@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enum\Visibility;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,16 @@ class ChecklistFactory extends Factory
     {
         return [
             'name' => \Str::random(40),
+            'visibility' => Visibility::Public->value
         ];
+    }
+
+    public function privateVisibility(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'visibility' => Visibility::Private->value
+            ];
+        });
     }
 }
