@@ -62,7 +62,7 @@
                 </h3>
                 <x-button type="link"
                           variant="green"
-                          class="rounded-lg align-baseline text-xl mx-auto mt-4"
+                          class="rounded-lg align-baseline text-xl mx-auto mt-4 py-2 px-4"
                           href="{{ url('/login') }}"
                 >
                     <i class="fi fi-rr-sign-in-alt"></i> Login

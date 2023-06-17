@@ -15,7 +15,7 @@
 @endphp
 
 @if ($type === 'link')
-    <a {{ $attributes->merge(['class' => "$colors[$variant] text-$textColor font-bold py-2 px-4 cursor-pointer"]) }}>
+    <a {{ $attributes->merge(['class' => "$colors[$variant] text-$textColor font-bold cursor-pointer"]) }}>
         {{ $slot }}
     </a>
 @else

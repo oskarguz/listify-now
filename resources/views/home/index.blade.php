@@ -37,7 +37,7 @@
     <section class="container columns-1 mx-auto my-8 px-8 drop-shadow-xl">
         <article class="flex flex-col justify-center gap-3 max-w-[800px] mx-auto">
             <p class="text-center font-semibold md:text-lg">Create list with form here:</p>
-            <x-button href="{{ url('/checklist/create') }}" type="link" variant="secondary" class="w-2/3 mx-auto text-center rounded-lg">Create list</x-button>
+            <x-button href="{{ url('/checklist/create') }}" type="link" variant="secondary" class="w-2/3 mx-auto text-center rounded-lg py-2 px-4">Create list</x-button>
             <p class="text-center font-bold md:text-lg">OR</p>
             <p class="text-center font-semibold md:text-lg">Paste your text here. Each new line generates a new entry on the list:</p>
             <textarea class="bg-background-light font-semibold border-0 ring ring-white hover:ring-orange-400 focus:ring focus:ring-orange-400 rounded" rows="5" placeholder="{{ "First item on the list,\nSecond item on the list,\n....\n...\n.." }}"></textarea>
