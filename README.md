@@ -22,3 +22,11 @@ that`s the current, live version. Available here: https://listify.bieda.it/
 3. [ ] a way to allow any user to view and/or edit personal lists (list privileges system),
 4. [ ] maybe new types of lists with richer content (images/videos),
 5. [ ] and more...
+
+
+## Technicals:
+- PHP,
+- Laravel,
+- MySql,
+- Vue.js
+- Docker
