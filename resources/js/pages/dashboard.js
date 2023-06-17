@@ -27,7 +27,7 @@ const createLocalStorageChecklistTable = () => {
         tr.dataset.id = id;
         tr.classList.add('cursor-pointer');
 
-        tr.innerHTML = `<td class="text-center">${id.substring(0, 20)}...</td><td class="text-center">${name}</td><td class="text-center"><button class="bg-red-500 p-2 rounded deleteBtn mx-auto"><i class="fi-br-trash align-middle"></i></button></td>`;
+        tr.innerHTML = `<td class="text-center">${id.substring(0, 10)}...</td><td class="text-center">${name}</td><td class="text-center"><button class="bg-red-500 p-2 rounded deleteBtn mx-auto"><i class="fi-br-trash align-middle"></i></button></td>`;
         tbody.appendChild(tr);
     }
 
@@ -63,7 +63,7 @@ window.addEventListener('DOMContentLoaded', (e) => {
                         reverseButtons: true,
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            checklistApi.deleteChecklist(id);
+                            checklistApi.deleteChecklist(id).catch((e) => { /* nothing */ });
                             checklistTable.row(targetRow).remove().draw();
 
                             Toastify({

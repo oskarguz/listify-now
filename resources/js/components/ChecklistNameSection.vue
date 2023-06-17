@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { useChecklistStore } from "../stores/checklist";
 import { storeToRefs } from "pinia";
 import Swal from "sweetalert2";
@@ -11,6 +11,7 @@ const checklistStore = useChecklistStore();
 
 const { name } = storeToRefs(checklistStore);
 const isEditing = ref(false);
+const nameInput = ref(null);
 
 let oldName = '';
 function toggleEditAction() {
@@ -18,6 +19,11 @@ function toggleEditAction() {
 
     if (isEditing.value) {
         oldName = name.value;
+        nextTick(() => {
+            if (nameInput.value) {
+                nameInput.value.focus();
+            }
+        })
     }
 }
 
@@ -95,6 +101,7 @@ async function deleteChecklist() {
         <div v-if="isEditing" class="flex mt-4">
             <p class="self-center font-bold me-2">Name:</p>
             <input class="rounded-lg w-full ring ring-background-primary hover:ring-orange-500 focus:ring focus:ring-orange-500"
+                   ref="nameInput"
                    type="text"
                    v-model.trim="name"
                    @keyup.enter="saveName"

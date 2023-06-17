@@ -23,21 +23,52 @@
                 <table class="display" id="checklistsDatatables" style="width:100%">
                     <thead>
                         <tr>
-                            <th style="text-align: center">Name</th>
-                            <th style="text-align: center">Creation date</th>
-                            <th style="text-align: center">Last update</th>
-                            <th style="text-align: center">Items count</th>
-                            <th style="text-align: center" data-sortable="false"></th>
+                            <th class="sm:hidden">Your lists</th>
+                            <th class="hidden sm:table-cell" style="text-align: center">Name</th>
+                            <th class="hidden sm:table-cell" style="text-align: center">Creation date</th>
+                            <th class="hidden sm:table-cell" style="text-align: center">Visibility</th>
+                            <th class="hidden sm:table-cell" style="text-align: center">Items count</th>
+                            <th class="hidden sm:table-cell" style="text-align: center" data-sortable="false"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($checklists as $checklist)
                             <tr class="cursor-pointer" data-id="{{ $checklist->id }}">
-                                <td class="text-center">{{ $checklist->name }}</td>
-                                <td class="text-center">{{ $checklist->created_at->toDateTimeString() }}</td>
-                                <td class="text-center">{{ $checklist->updated_at->toDateTimeString() }}</td>
-                                <td class="text-center">{{ $checklist->items->count() }}</td>
-                                <td class="text-center">
+                                <td class="sm:hidden">
+                                    <strong>{{ $checklist->name }}</strong>
+                                    @if ($checklist->is_public())
+                                        <span class="text-green-700 text-sm font-semibold">
+                                            (<i class="fi-bs-eye align-middle"></i> Public)
+                                        </span>
+                                    @else
+                                        <span class="text-red-700 text-sm font-semibold">
+                                            (<i class="fi-bs-eye-crossed align-middle"></i> Private)
+                                        </span>
+                                    @endif
+                                    ,<br/>
+                                    <span class="italic">Creation date:</span> {{ $checklist->created_at->toDateTimeString() }},<br/>
+                                    <span class="italic">Items count:</span> {{ $checklist->items->count() }},<br/>
+                                    <div class="flex w-full">
+                                        <button class="bg-red-500 p-2 rounded deleteBtn">
+                                            <i class="fi-br-trash align-middle"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="hidden sm:table-cell text-center">{{ $checklist->name }}</td>
+                                <td class="hidden sm:table-cell text-center">{{ $checklist->created_at->toDateTimeString() }}</td>
+                                <td class="hidden sm:table-cell text-center">
+                                    @if ($checklist->is_public())
+                                        <span class="text-green-700 text-sm font-semibold">
+                                            <i class="fi-bs-eye align-middle"></i> Public
+                                        </span>
+                                    @else
+                                        <span class="text-red-700 text-sm font-semibold">
+                                            <i class="fi-bs-eye-crossed align-middle"></i> Private
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="hidden sm:table-cell text-center">{{ $checklist->items->count() }}</td>
+                                <td class="hidden sm:table-cell text-center">
                                     <button class="bg-red-500 p-2 rounded deleteBtn">
                                         <i class="fi-br-trash align-middle"></i>
                                     </button>
